@@ -155,16 +155,23 @@ public class PlaceOrderFormController {
         }
 
         String qty = txtQty.getText();
+        System.out.println(qty);
+
         if (!isInt(qty)) {
             showInvalidateMsgBox("Qty should be a number");
             return;
-        } else if (Integer.parseInt(qty) == 0) {
+        } else if(qty.isEmpty()){
+            showInvalidateMsgBox("Qty is NULL");
+            return;
+        }
+        else if (Integer.parseInt(qty) == 0) {
             showInvalidateMsgBox("Qty can't be zero");
             return;
         } else if (Integer.parseInt(qty) > Integer.parseInt(txtQtyOnHand.getText())) {
             showInvalidateMsgBox("Invalid Qty");
             return;
         }
+
 
         if (tblOrderDetails.getSelectionModel().isEmpty()) {
             // New
@@ -197,7 +204,7 @@ public class PlaceOrderFormController {
         tblOrderDetails.refresh();
         reset();
 
-//        calculateTotal();
+      calculateTotal();
     }
 
     @FXML
@@ -209,7 +216,7 @@ public class PlaceOrderFormController {
         synchronizeQty(selectedItem.getCode());
         reset();
 
-//        calculateTotal();
+      calculateTotal();
 
     }
 
@@ -229,7 +236,8 @@ public class PlaceOrderFormController {
             orderDetailDTOS.add(new OrderDetailDTO(item.getCode(), item.getDescription(), item.getQty(), item.getUnitPrice()));
         }
         try {
-            manageOrdersBO.createOrder(new OrderDTO(txtOrderID.getText(), txtOrderDate.getValue(), txtCustomerId.getText(), orderDetailDTOS));
+             CustomerDTO customer = manageCustomersBO.findCustomer(txtCustomerId.getText());
+            manageOrdersBO.createOrder(new OrderDTO(txtOrderID.getText(), txtOrderDate.getValue(),customer, orderDetailDTOS));
         } catch (Exception e) {
             Logger.getLogger("").log(Level.SEVERE, null, e);
         }

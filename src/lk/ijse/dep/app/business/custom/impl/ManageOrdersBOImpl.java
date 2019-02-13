@@ -41,7 +41,7 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
 
         Session mySession = HibernateUtil.getSessionFactory().openSession();
         try(Session session = mySession){
-            itemDAO.setSession(session);
+            orderDAO.setSession(session);
 
             session.beginTransaction();
             List<OrderDTO> orderDTOS = orderDAO.findAll().map(Converter::<OrderDTO>getDTOList).get();
@@ -55,7 +55,7 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
 
     @Override
     public String generateOrderId() throws Exception {
-        return orderDAO.count() + 1 + "";
+        return orderDAO.count() + 3 + "";
     }
 
     @Override
@@ -63,10 +63,12 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
         Session mySession = HibernateUtil.getSessionFactory().openSession();
         boolean result=false;
         try(Session session = mySession){
+            orderDAO.setSession(session);
             session.beginTransaction();
-            orderDAO.save(new Order(dto.getId(), Date.valueOf(dto.getDate()), dto.getCustomerId()));
+            orderDAO.save(new Order(dto.getId(), Date.valueOf(dto.getDate()), Converter.getEntity(dto.getCustomer())));
             result=true;
                 if (result){
+                    orderDetailDAO.setSession(session);
                     for (OrderDetailDTO detailDTO : dto.getOrderDetailDTOS()) {
                          orderDetailDAO.save(new OrderDetail(dto.getId(),
                          detailDTO.getCode(), detailDTO.getQty(), detailDTO.getUnitPrice()));

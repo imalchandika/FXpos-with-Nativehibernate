@@ -1,5 +1,7 @@
 package lk.ijse.dep.app.entity;
 
+import lk.ijse.dep.app.dto.CustomerDTO;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -17,15 +19,21 @@ public class Order extends SuperEntity{
     private Customer customer;
 
 
-    public Order(String id, java.sql.Date date, String customerId) {
-
-    }
-
-    public Order(String id, Date date, Customer customer) {
+    public Order(String id, java.sql.Date date, Customer customer) {
         this.id = id;
         this.date = date;
         this.customer = customer;
     }
+
+//    public <T extends SuperEntity> Order(String id, java.sql.Date date, T entity) {
+//        super();
+//    }
+
+//    public Order(String id, Date date, CustomerDTO customer) {
+//        this.id = id;
+//        this.date = date;
+//        this.customer = customer;
+//    }
 
     public String getId() {
         return id;
@@ -43,11 +51,11 @@ public class Order extends SuperEntity{
         this.date = date;
     }
 
-    public Customer getCustomerId() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomerId(Customer customerId) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 

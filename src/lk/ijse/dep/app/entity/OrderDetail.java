@@ -14,7 +14,7 @@ public class OrderDetail extends SuperEntity{
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name="code", referencedColumnName = "code",insertable = false ,updatable = false)
+    @JoinColumn(name="itemCode", referencedColumnName = "code",insertable = false ,updatable = false)
     private Item code;
 
     public OrderDetail() {
