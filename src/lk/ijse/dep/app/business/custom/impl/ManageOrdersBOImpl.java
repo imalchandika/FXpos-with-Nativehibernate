@@ -6,10 +6,10 @@ import lk.ijse.dep.app.dao.DAOFactory;
 import lk.ijse.dep.app.dao.custom.ItemDAO;
 import lk.ijse.dep.app.dao.custom.OrderDAO;
 import lk.ijse.dep.app.dao.custom.OrderDetailDAO;
-import lk.ijse.dep.app.dao.custom.QueryDAO;
 import lk.ijse.dep.app.dto.OrderDTO;
 import lk.ijse.dep.app.dto.OrderDTO2;
 import lk.ijse.dep.app.dto.OrderDetailDTO;
+import lk.ijse.dep.app.entity.Item;
 import lk.ijse.dep.app.entity.Order;
 import lk.ijse.dep.app.entity.OrderDetail;
 import lk.ijse.dep.app.util.HibernateUtil;
@@ -55,7 +55,20 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
 
     @Override
     public String generateOrderId() throws Exception {
-        return orderDAO.count() + 3 + "";
+        Session mySession = HibernateUtil.getSessionFactory().openSession();
+        try(Session session = mySession){
+            orderDAO.setSession(session);
+
+            session.beginTransaction();
+             String count = orderDAO.count() + 1 + "";
+            session.getTransaction().commit();
+            System.out.println(count);
+            return count;
+        }catch(Exception ex){
+            mySession.getTransaction().rollback();
+            throw ex;
+        }
+
     }
 
     @Override
@@ -74,16 +87,19 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
                          detailDTO.getCode(), detailDTO.getQty(), detailDTO.getUnitPrice()));
 
 
-
-//                Item item = itemDAO.find(detailDTO.getCode()).get();
-//                int qty = item.getQtyOnHand() - detailDTO.getQty();
-//                item.setQtyOnHand(qty);
-//                itemDAO.update(item);
+                itemDAO.setSession(session);
+                Item item = itemDAO.find(detailDTO.getCode()).get();
+                int qty = item.getQtyOnHand() - detailDTO.getQty();
+                item.setQtyOnHand(qty);
+                itemDAO.update(item);
 
                           }
                 }
 
             session.getTransaction().commit();
+        }catch (Exception ex){
+            mySession.getTransaction().rollback();
+            throw ex;
         }
     }
 
