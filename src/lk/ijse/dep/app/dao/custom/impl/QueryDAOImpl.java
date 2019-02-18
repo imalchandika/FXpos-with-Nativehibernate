@@ -15,13 +15,25 @@ public class QueryDAOImpl implements QueryDAO {
 
     @Override
     public List<CustomEntity> findOrderDetailsWithItemDescriptions(String orderId) throws Exception {
-        List<Object[]> list=session.createQuery("SELECT o.orderDetailPK.itemCode,o.qty,o.unitPrice,i.description FROM OrderDetail o INNER JOIN o.item i where o.orderDetailPK.orderId=?1").setParameter(1, orderId).list();
+
+        Query query = session.createQuery("select e.orderDetailPK.orderId,o.date,o.customer.id,o.customer.name,e.qty*e.unitPrice from OrderDetail e INNER JOIN e.item a INNER JOIN e.order o where e.orderDetailPK.orderId=?1")
+                      .setParameter(1, orderId);
+        List<Object[]> list = query.list();
         ArrayList<CustomEntity> customEntityArrayList = new ArrayList<>();
+
         for(Object[] arr : list){
-            customEntityArrayList.add(new CustomEntity((String)arr[0],(int)arr[1],(double)arr[2],(String) arr[3]));
-            System.out.println( Arrays.toString(arr)+"  ad@miayyy  "+arr[1]);
+            customEntityArrayList.add(new CustomEntity((String)arr[0],(Date)arr[1],(String)arr[2],(String)arr[3],(double)arr[4]));
+            System.out.println( Arrays.toString(arr)+"  ad@mia  "+arr[1]);
         }
         return customEntityArrayList;
+  //////////////////////////////////////////////////////////////////////////////////////
+//        List<Object[]> list=session.createQuery("SELECT o.orderDetailPK.itemCode,o.qty,o.unitPrice,i.description FROM OrderDetail o INNER JOIN o.item i where o.orderDetailPK.orderId=?1").setParameter(1, orderId).list();
+//        ArrayList<CustomEntity> customEntityArrayList = new ArrayList<>();
+//        for(Object[] arr : list){
+//            customEntityArrayList.add(new CustomEntity((String)arr[0],(int)arr[1],(double)arr[2],(String) arr[3]));
+//            System.out.println( Arrays.toString(arr)+"  ad@miayyy  "+arr[1]);
+//        }
+//        return customEntityArrayList;
     }
 
     @Override

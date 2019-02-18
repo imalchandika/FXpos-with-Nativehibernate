@@ -13,6 +13,7 @@ import lk.ijse.dep.app.util.HibernateUtil;
 import org.hibernate.Session;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,7 +145,7 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
 //            throw ex;
 //        }
 ////////////////////////////////////////////////////////////////////////////////////
-        List<OrderDetailDTO> dtoList = null;
+        List<OrderDetailDTO> dtoList = new ArrayList<>();
 //        Session mySession2 = HibernateUtil.getSessionFactory().openSession();
 //        try (Session session = mySession2) {
 //            orderDetailDAO.setSession(session);
@@ -180,27 +181,28 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
             result=true;
             if(result) {
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////
                 customerDAO.setSession(session);
                 customerDTO = customerDAO.find("c001").map(Converter::<CustomerDTO>getDTO).orElse(null);
+/////////////////////////////////////////////////////////////////////////////////////////////
+                System.out.println( customerDTO.getName());
                 result=true;
                 if(result) {
                     orderDetailDAO.setSession(session);
                     List<OrderDetail> orderDetails = orderDetailDAO.find(orderId);
                     for (OrderDetail orderDetail : orderDetails) {
+                        System.out.println(orderDetail.getOrder().getId()+" "+ orderDetail.getCode().getDescription()+" "+orderDetail.getQty()+" "+orderDetail.getUnitPrice());
                         dtoList.add(new OrderDetailDTO(orderDetail.getOrder().getId(), orderDetail.getCode().getDescription(), orderDetail.getQty(), orderDetail.getUnitPrice()));
                     }
 
                             for (CustomEntity customEntity : odwtid) {
+          //////////////////////////////////////////////////////////////////////////////////////////////////
 
                                 orderDTO = new OrderDTO(customEntity.getOrderId(), customEntity.getOrderDate().toLocalDate(), customerDTO, dtoList);
+           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             }
 
-                }else {
-                    mySession.getTransaction().rollback();
                 }
-            }else {
-                mySession.getTransaction().rollback();
             }
             session.getTransaction().commit();
             return orderDTO;

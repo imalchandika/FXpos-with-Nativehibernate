@@ -116,7 +116,7 @@ public class ViewOrderFormController {
 
     public void fillData() {
         try {
-            OrderDTO orderDTO = null;
+            OrderDTO orderDTO = new OrderDTO();
 
             orderDTO = manageOrdersBO.findOrder(this.orderId);
             System.out.println(orderDTO.getId());
