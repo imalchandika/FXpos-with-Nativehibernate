@@ -119,7 +119,7 @@ public class ViewOrderFormController {
             OrderDTO orderDTO = null;
 
             orderDTO = manageOrdersBO.findOrder(this.orderId);
-
+            System.out.println(orderDTO.getId());
             txtCustomerID.setText(orderDTO.getId());
             txtOrderID.setText(orderDTO.getId());
             txtOrderDate.setValue(orderDTO.getDate());

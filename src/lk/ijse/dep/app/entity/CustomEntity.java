@@ -15,23 +15,23 @@ public class CustomEntity {
     private double unitPrice;
     private String description;
 
-    public CustomEntity() {
-    }
+
 
     public CustomEntity(String itemCode, int qty, double unitPrice, String description) {
-        this.itemCode = itemCode;
-        this.qty = qty;
-        this.unitPrice = unitPrice;
-        this.description = description;
+        this.setItemCode(itemCode);
+        this.setQty(qty);
+        this.setUnitPrice(unitPrice);
+        this.setDescription(description);
     }
 
     public CustomEntity(String orderId, Date orderDate, String customerId, String customerName, double total) {
-        this.orderId = orderId;
-        this.orderDate = orderDate;
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.total = total;
+        this.setOrderId(orderId);
+        this.setOrderDate(orderDate);
+        this.setCustomerId(customerId);
+        this.setCustomerName(customerName);
+        this.setTotal(total);
     }
+
 
     public String getOrderId() {
         return orderId;

@@ -1,6 +1,6 @@
 package lk.ijse.dep.app.entity;
 
-import lk.ijse.dep.app.dto.CustomerDTO;
+
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,6 +18,8 @@ public class Order extends SuperEntity{
     @JoinColumn(name="customerId", referencedColumnName = "id")
     private Customer customer;
 
+    public Order() {
+    }
 
     public Order(String id, java.sql.Date date, Customer customer) {
         this.id = id;

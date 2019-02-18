@@ -43,8 +43,8 @@ public class OrderDTO extends SuperDTO{
         return customer;
     }
 
-    public void setCustomer(String customerId) {
-        this.customer = customer;
+    public void setCustomer(CustomerDTO customerId) {
+        this.customer = customerId;
     }
 
     public List<OrderDetailDTO> getOrderDetailDTOS() {
