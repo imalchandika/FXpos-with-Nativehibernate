@@ -13,7 +13,6 @@ import lk.ijse.dep.app.util.HibernateUtil;
 import org.hibernate.Session;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,7 +130,7 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
 
     @Override
     public OrderDTO findOrder(String orderId) throws Exception {
-        CustomerDTO customerDTO ;
+
 //        Session mySession1 = HibernateUtil.getSessionFactory().openSession();
 //        try(Session session = mySession1){
 //            customerDAO.setSession(session);
@@ -145,7 +144,7 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
 //            throw ex;
 //        }
 ////////////////////////////////////////////////////////////////////////////////////
-        List<OrderDetailDTO> dtoList = new ArrayList<>();
+
 //        Session mySession2 = HibernateUtil.getSessionFactory().openSession();
 //        try (Session session = mySession2) {
 //            orderDetailDAO.setSession(session);
@@ -171,6 +170,9 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
 //        }
 
 ///////////////////////////////////////////////////////////////////////////////////////
+        CustomerDTO customerDTO ;
+        List<OrderDetailDTO> dtoList = new ArrayList<>();
+
         boolean result=false;
         Session mySession = HibernateUtil.getSessionFactory().openSession();
         try (Session session = mySession) {
@@ -202,7 +204,11 @@ public class ManageOrdersBOImpl implements ManageOrdersBO {
            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             }
 
+                }else{
+                    mySession.getTransaction().rollback();
                 }
+            }else{
+                mySession.getTransaction().rollback();
             }
             session.getTransaction().commit();
             return orderDTO;
